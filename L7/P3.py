@@ -1,37 +1,53 @@
-import numpy as np
 import pickle
+import numpy as np
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
-def load_data(file_path):
-    with open(file_path, "rb") as fh:
-        loaded_data = pickle.load(fh)
-    return loaded_data
 
-data = load_data("P3_data.pkl")
-xs, ys = data['X'], data['Y']
+# Load the data from 'P3_data.pkl'
+def load_data():
+    with open("P3_data.pkl", "rb") as fh:
+        loaded_data = pickle.load(fh)
+
+    xs = loaded_data["x"]
+    ys = loaded_data["Y"]
+
+    return xs, ys
+
 
 def DPolyPredict(x):
-    degree = 7
-    x_train, x_test, y_train, y_test = train_test_split(xs, ys, test_size=0.30)
+    xs, ys = load_data()
+    x_train, xtest, y_train, ytest = train_test_split(xs, ys, test_size=0.30)
 
-    model = make_pipeline(PolynomialFeatures(degree=degree), LinearRegression())
-    model.fit(x_train.reshape(-1, 1), y_train)
+    model = fit_quadratic_model(x_train, y_train)
     x = np.array(x).reshape(-1, 1)
     y_pred = model.predict(x)
 
-    return y_pred.flatten()
+    return y_pred
+
+
+# make a quadratic model
+def fit_quadratic_model(xt, yt):
+    model = make_pipeline(PolynomialFeatures(degree=7), LinearRegression())
+    model.fit(xt.reshape(-1, 1), yt)
+    return model
+
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    
-    plt.plot(xs, ys, 'k.')
+
+    xs, ys = load_data()
+    x_train, xtest, y_train, ytest = train_test_split(xs, ys, test_size=0.30)
+
+    plt.plot(x_train, y_train, "k.")
     xp = np.linspace(0, 3, 200)
     yp = DPolyPredict(xp)
-    plt.plot(xp, yp, 'r--')
+    plt.plot(xp, yp, "r--")
     plt.show()
 
 # Output
 # เส้นโค้ง เส้นปะเส้นจุด
+    
+

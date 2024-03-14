@@ -35,3 +35,6 @@ if __name__ == "__main__":
 # Output
 # [277.71142742 131.44976324  48.44489819  28.69683228  72.2055655
 #  178.97109785 348.99342933 582.27255995 878.80848971]
+    
+# Print out the keys in the loaded data dictionary
+# print("Keys in loaded data:", loaded_data.keys())

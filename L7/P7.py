@@ -1,41 +1,38 @@
 import numpy as np
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 
 
 def eDiag(x):
-    # Load data
-    factors = np.load('P7_x.npy')
-    effect = np.load('P7_y.npy').ravel()  # Reshape y to 1d array
+    factors = np.load("P7_x.npy")
+    labels = np.load("P7_y.npy")
 
+    labels = np.ravel(labels)
+    # Split the data into training and testing sets
 
-    # Initialize and train the model
-    model = LogisticRegression()
-    model.fit(factors, effect)
+    # Build a binary classification model
+    model = RandomForestClassifier()
+    model.fit(factors, labels)
 
-    # Make predictions
+    # Make predictions on the provided data
     predictions = model.predict(x)
 
     return predictions
 
-if __name__ == '__main__':
-    x = np.array([[5, 65, 4, 5, 3],
-                  [4, 72, 1, 3, 3],
-                  [2, 32, 2, 3, 3]])
+
+# Test the eDiag function
+if __name__ == "__main__":
+    x = np.array([[5, 65, 4, 5, 3], [4, 72, 1, 3, 3], [2, 32, 2, 3, 3]])
 
     y = eDiag(x)
-    print('Prediction:', y)
-
-    Words = ['negative', 'positive']
+    print("Prediction:", y)
+    Words = ["negative", "positive"]
     for i, yi in enumerate(y):
         print(f"Patient {i}'s result is {Words[yi]}.")
-
-    # Evaluate the model (optional)
-    # y_pred = eDiag(x_test)
-    # accuracy = accuracy_score(y_test, y_pred)
-    # print('Accuracy:', accuracy)
 
 # Output
 # Prediction: [1 0 0]
 # Patient 0's result is positive.
 # Patient 1's result is negative.
 # Patient 2's result is negative.
+        
